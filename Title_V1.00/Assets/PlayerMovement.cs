@@ -7,16 +7,20 @@ public class PlayerMovement : MonoBehaviour {
     public float speed;
     private Rigidbody2D rgbd;
 
-    // Multiple Characters Batman and Fishman are from the tutorial I found. Will be changed later.
-    GameObject computer, flash, chrome;
+    // This creates the multiple characters. The 3 we decided to start with are the artist, boombox, and segway squid
+    GameObject artist, boomBox, segway, eighty, snek;
     int characterselect;
+    int cooldown;
 
     private void Awake()
     {
+        cooldown = 0;
         characterselect = 1;
-        computer = GameObject.Find("Computer");
-        flash = GameObject.Find("Flash");
-        chrome = GameObject.Find("Chrome");
+        artist = GameObject.Find("artistCharacter"); // The artist character
+        boomBox = GameObject.Find("boomBoxCharacter"); // The boombox character
+        segway = GameObject.Find("segwaySquid"); // The segway character
+        eighty = GameObject.Find("eightysGuy"); // The eighty's guy character
+        snek = GameObject.Find("snakeGunner"); // The snake with a gun
     }
 
     // Use this for initialization
@@ -37,40 +41,83 @@ public class PlayerMovement : MonoBehaviour {
     // A function to update the characters
     void Update()
     {
-        // Increments the character number
+        // A cooldown tier for swithcing characters.
+        if (cooldown > 0)
+        {
+            cooldown--;
+        }
+
+        // Increments the character number using the Jump button which is the Space Bar
         if (Input.GetButtonDown("Jump"))
         {
-            if (characterselect == 1)
+            if (characterselect == 1 && cooldown < 1)
             {
                 characterselect = 2;
+                cooldown = 300;
             }
-            else if (characterselect == 2)
+            else if (characterselect == 2 && cooldown < 1)
             {
                 characterselect = 3;
+                cooldown = 300;
             }
-            else if (characterselect == 3)
+            else if (characterselect == 3 && cooldown < 1)
+            {
+                characterselect = 4;
+                cooldown = 300;
+            }
+            else if (characterselect == 4 && cooldown < 1)
+            {
+                characterselect = 5;
+                cooldown = 300;
+            }
+            else if (characterselect == 5 && cooldown < 1)
             {
                 characterselect = 1;
+                cooldown = 300;
             }
+
         }
         // Sets the character based on the value of characterselect
         if (characterselect == 1)
         {
-            computer.SetActive(true);
-            flash.SetActive(false);
-            chrome.SetActive(false);
+            artist.SetActive(true);
+            snek.SetActive(false);
+            segway.SetActive(false);
+            eighty.SetActive(false);
+            boomBox.SetActive(false);
         }
         else if (characterselect == 2)
         {
-            computer.SetActive(false);
-            flash.SetActive(true);
-            chrome.SetActive(false);
+            artist.SetActive(false);
+            boomBox.SetActive(true);
+            snek.SetActive(false);
+            eighty.SetActive(false);
+            segway.SetActive(false);
+
         }
         else if (characterselect == 3)
         {
-            flash.SetActive(false);
-            chrome.SetActive(true);
-            computer.SetActive(false);
+            boomBox.SetActive(false);
+            segway.SetActive(true);
+            artist.SetActive(false);
+            eighty.SetActive(false);
+            snek.SetActive(false);
+        }
+        else if (characterselect == 4)
+        {
+            segway.SetActive(false);
+            eighty.SetActive(true);
+            artist.SetActive(false);
+            snek.SetActive(false);
+            boomBox.SetActive(false);
+        }
+        else if (characterselect == 5)
+        {
+            eighty.SetActive(false);
+            snek.SetActive(true);
+            artist.SetActive(false);
+            boomBox.SetActive(false);
+            segway.SetActive(false);
         }
     }
 
