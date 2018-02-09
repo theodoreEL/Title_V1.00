@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController: MonoBehaviour {
 
     public float moveSpeed;
+    private bool wait;
     private float horizMoveVelocity;
     private float vertMoveVelocity;
     private Rigidbody2D playerRigidBody;
@@ -13,15 +14,18 @@ public class PlayerController: MonoBehaviour {
     public Transform bulletProj;
     private float shootHoriz;
     private float shootVert;
+    private float offset = 1.15f;
+    private Vector3 shootPos;
     //Vector2 prevDir = Vector2.right;
 
     // Use this for initialization
     void Start () {
+        wait = false;
         playerRigidBody = GetComponent<Rigidbody2D>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void FixedUpdate() {
         //Movement: sets moveVelocity of horizontal and vertical movement to 0 each update, unless WASD keys are pressed, then sets them to movespeed
         //and makes playerRigidbody velocity equal to velocity given by specific key pressed
 
@@ -53,71 +57,19 @@ public class PlayerController: MonoBehaviour {
         shootHoriz = Input.GetAxisRaw("FireHoriz");
         shootVert = Input.GetAxisRaw("FireVert");
         bullet.direction = new Vector2(shootHoriz, shootVert);
-        if (shootHoriz != 0 || shootVert != 0)
-            Instantiate(bullet, transform.position, transform.rotation);
-
-        /*if (Input.GetKey(KeyCode.RightArrow))
+        shootPos = new Vector3(transform.position.x + offset * shootHoriz, transform.position.y + offset * shootVert, 0);
+        if ((shootHoriz != 0 || shootVert != 0) && !wait)
         {
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
-        }
+            wait = true;
+            Instantiate(bullet, shootPos, transform.rotation);
+            Invoke("ShotBullet", .1f);
 
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            firePosition.Rotate(Vector3.up);
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
         }
+    }
 
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            firePosition.Translate(-firePosition.position.x, -firePosition.position.y, 0);
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            firePosition.Translate(-2*firePosition.position.x, 0, 0);
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
-        }
-
-        if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.UpArrow))
-        {
-            firePosition.Translate(0, firePosition.position.y, 0);
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
-        }
-
-        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftArrow))
-        {
-            firePosition.Translate(-2*firePosition.position.x, firePosition.position.y, 0);
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
-        }
-
-        if (Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.RightArrow))
-        {
-            firePosition.Translate(0, -firePosition.position.y, 0);
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.DownArrow))
-        {
-            firePosition.Translate(-2*firePosition.position.x, -firePosition.position.y, 0);
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
-        }
-
-   void Update()
+    void ShotBullet()
     {
-        Vector2 movement_vector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        //if player stoped moving, we want to save last moving direction  (it is short form of IF statement);
-        prevDir = (movement_vector.Equals(Vector2.zero)) ? prevDir : movement_vector;
-        rbody.MovePosition(rbody.position + movement_vector * Time.deltaTime);
-        //instatiate fireBall
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //create tmp variable to call its function
-            FireBall tmp = (FireBall)Instantiate(fireBall, transform.position, Quaternion.identity);
-            //send normalized vector to our created fireball
-            tmp.Dir(prevDir.normalized);
-        }
-    }*/
+        wait = false;
     }
 }
 

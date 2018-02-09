@@ -18,6 +18,7 @@ public class BulletController : MonoBehaviour {
     void Start () {
         bullet = GetComponent<Rigidbody2D>();
         player = FindObjectOfType<PlayerController>();
+        
 	}
 
 	// Update is called once per frame
@@ -25,9 +26,18 @@ public class BulletController : MonoBehaviour {
         bullet.velocity = direction * speed;
 	}
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Destroy(gameObject);
+        if (other.tag == "Enemy")
+        {
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
+        else if (other.tag == "Projectile")
+            return;
+        else
+            Destroy(gameObject);
     }
+
 }
 
