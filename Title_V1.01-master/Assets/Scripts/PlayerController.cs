@@ -18,6 +18,11 @@ public class PlayerController: MonoBehaviour {
     private Vector3 shootPos;
     //Vector2 prevDir = Vector2.right;
 
+    public float knockback;
+    public float knockbackLength;
+    public float knockbackCount;
+    private Vector2 hitLocation;
+
     // Use this for initialization
     void Start () {
         wait = false;
@@ -51,8 +56,12 @@ public class PlayerController: MonoBehaviour {
         {
             vertMoveVelocity = -moveSpeed;
         }
+        if (knockbackCount <= 0)
+            playerRigidBody.velocity = new Vector2(horizMoveVelocity, vertMoveVelocity);
+        else
+        {
 
-        playerRigidBody.velocity = new Vector2(horizMoveVelocity, vertMoveVelocity);
+        }
 
         shootHoriz = Input.GetAxisRaw("FireHoriz");
         shootVert = Input.GetAxisRaw("FireVert");
